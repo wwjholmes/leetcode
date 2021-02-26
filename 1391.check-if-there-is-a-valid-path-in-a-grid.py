@@ -10,89 +10,92 @@ from typing import List
 
 
 class Solution:
+    STREET_1: int = 1
+    STREET_2: int = 2
+    STREET_3: int = 3
+    STREET_4: int = 4
+    STREET_5: int = 5
+    STREET_6: int = 6
+
+    directions = {
+        # option1: (row, col), option2: (row, col)
+        STREET_1: [(0, -1), (0, 1)],
+        STREET_2: [(-1, 0), (1, 0)],
+        STREET_3: [(1, 0), (0, -1)],
+        STREET_4: [(1, 0), (0, 1)],
+        STREET_5: [(-1, 0), (0, -1)],
+        STREET_6: [(-1, 0), (0, 1)],
+    }
+
+    connected = {
+        STREET_1:
+        {
+            0: [STREET_1, STREET_4, STREET_6],
+            1: [STREET_1, STREET_3, STREET_5],
+        },
+        STREET_2:
+        {
+            0: [STREET_2, STREET_3, STREET_4],
+            1: [STREET_2, STREET_5, STREET_6],
+        },
+        STREET_3:
+        {
+            0: [STREET_2, STREET_5, STREET_6],
+            1: [STREET_1, STREET_3, STREET_5],
+        },
+        STREET_4:
+        {
+            0: [STREET_2, STREET_5, STREET_6],
+            1: [STREET_1, STREET_3, STREET_5],
+        },
+        STREET_5:
+        {
+            0: [STREET_2, STREET_3, STREET_4],
+            1: [STREET_1, STREET_4, STREET_6],
+        },
+        STREET_6:
+        {
+            0: [STREET_2, STREET_3, STREET_4],
+            1: [STREET_1, STREET_3, STREET_5],
+        },
+    }
+
     def hasValidPath(self, grid: List[List[int]]) -> bool:
         visited = [[False for y in grid[0]]for x in grid]
-        first = grid[0][0]
-        if first == 1:
-            return self.moveToNext(0, 0, 2, grid, visited) or self.moveToNext(0, 0, 4, grid, visited)
-        if first == 2:
-            return self.moveToNext(0, 0, 1, grid, visited) or self.moveToNext(0, 0, 3, grid, visited)
-        if first == 3:
-            return self.moveToNext(0, 0, 2, grid, visited) or self.moveToNext(0, 0, 1, grid, visited)
-        if first == 4:
-            return self.moveToNext(0, 0, 1, grid, visited) or self.moveToNext(0, 0, 4, grid, visited)
-        if first == 5:
-            return self.moveToNext(0, 0, 2, grid, visited) or self.moveToNext(0, 0, 3, grid, visited)
-        if first == 6:
-            return self.moveToNext(0, 0, 3, grid, visited) or self.moveToNext(0, 0, 4, grid, visited)
+        m = len(grid)
+        n = len(grid[0])
 
-    def moveToNext(self, i: int, j: int, direction: int, grid: List[List[int]], visited: List[List[bool]]) -> bool:
-        n = len(grid)  # height of grid
-        m = len(grid[0])  # width of grid
+        stack = [(0, 0)]
+        while stack:
+            (row, col) = stack.pop()
+            # print('pop:', (row, col))
+            if row == m - 1 and col == n - 1:
+                return True
 
-        # reach the bottom-right cell
-        if i == m - 1 and j == n - 1:
-            if grid[j][i] == 1:
-                return direction == 2 or direction == 4
-            if grid[j][i] == 2:
-                return direction == 1 or direction == 3
-            if grid[j][i] == 3:
-                return direction == 1 or direction == 2
-            if grid[j][i] == 4:
-                return direction == 1 or direction == 4
-            if grid[j][i] == 5:
-                return direction == 2 or direction == 3
-            if grid[j][i] == 6:
-                return direction == 3 or direction == 4
-            return False 
+            street = grid[row][col]
+            visited[row][col] = True
 
-        # out of grid
-        if i < 0 or i >= m:
-            return False
-        if j < 0 or j >= n:
-            return False
+            for idx, (dx, dy) in enumerate(self.directions[street]):
+                nx = row + dx
+                ny = col + dy
 
-        # if current cell already being marked as visited, return False
-        if visited[j][i]:
-            return False
+                if nx < 0 or nx >= m or ny < 0 or ny >= n:
+                    continue
 
-        # mark current cell as visited
-        visited[j][i] = True
+                if visited[nx][ny]:
+                    continue
 
-        cell = grid[j][i]
-        if cell == 1:
-           if direction == 4 and self.moveToNext(i - 1, j, 4, grid, visited):
-               return True
-           elif direction == 2 and self.moveToNext(i + 1, j, 2, grid, visited):
-               return True
-        elif cell == 2:
-           if direction == 1 and self.moveToNext(i, j - 1, 1, grid, visited):
-               return True
-           elif direction == 3 and self.moveToNext(i, j + 1, 3, grid, visited):
-               return True
-        elif cell == 3:
-           if direction == 1 and self.moveToNext(i - 1, j, 4, grid, visited):
-               return True
-           elif direction == 2 and self.moveToNext(i, j + 1, 3,  grid, visited):
-               return True
-        elif cell == 4:
-           if direction == 1 and self.moveToNext(i + 1, j, 2, grid, visited):
-               return True
-           elif direction == 4 and self.moveToNext(i, j + 1, 3, grid, visited):
-               return True
-        elif cell == 5:
-           if direction == 3 and self.moveToNext(i - 1, j, 4, grid, visited):
-               return True
-           elif direction == 2 and self.moveToNext(i, j - 1, 1, grid, visited):
-               return True
-        elif cell == 6:
-           if direction == 3 and self.moveToNext(i + 1, j, 2, grid, visited):
-               return True
-           elif direction == 4 and self.moveToNext(i, j - 1, 1, grid, visited):
-               return True
+                if grid[nx][ny] in self.connected[street][idx]:
+                    # print('push:', (nx, ny))
+                    stack.append((nx, ny))
 
-        # mark current cell as un-visited before return
-        visited[j][i] = False 
         return False
+
+# s = Solution()
+# grid = [[1, 1, 2]]
+# grid = [[1, 2, 1], [1, 2, 1]]
+# grid = [[1,1,1,1,1,1,3]]
+# grid = [[2,4,3],[6,5,2]]
+# print(s.hasValidPath(grid))
 
 # @lc code=end
