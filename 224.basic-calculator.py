@@ -95,14 +95,31 @@ class Solution:
                         break
                     else:
                         suffix.append(opeartors.pop())
+        # append all rest of operators
         opeartors.reverse()
         suffix.extend(opeartors)
-        return suffix
+
+        # calculate based on suffix notation
+        digits = []
+        while suffix:
+            val = suffix.pop(0)
+            if val == PLUS:
+                a = int(digits.pop(0))
+                b = int(digits.pop(0))
+                digits.append(a + b)
+            elif val == MINUS:
+                a = int(digits.pop(0))
+                b = int(digits.pop(0))
+                digits.append(a - b)
+            else:
+                digits.append(val)
+
+        return digits.pop(0)
         
         
 s = Solution()
-infix = "(1+(4+5+2)-3)+(6+8)"
 infix = "1 + 1"
+infix = "(1+(4+5+2)-3)+(6+8)"
 print(s.calculate(infix))
 # @lc code=end
 
