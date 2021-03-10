@@ -68,57 +68,53 @@
 #
 
 from typing import List
+from collections import defaultdict
 
 # @lc code=start
 class Solution:
+    STATE_UNVISITED = 1
+    STATE_VISITED = 2
+    STATE_ADDED = 3
+
     def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
-        dependencies = {}
-        unlock = {}
-        for pair in prerequisites:
-            ai = pair[0]
-            bi = pair[1]
-            if ai in dependencies:
-                dependencies[ai].add(bi)
-            else:
-                dependencies[ai] = {bi}
-            
-            if bi in unlock:
-                unlock[bi].add(ai)
-            else:
-                unlock[bi] = {ai}
+        adj_list = defaultdict(list)
+
+        for dest, src in prerequisites:
+            adj_list[src].append(dest)
         
-        # print(dependencies)
-        # print(unlock)
+        topological_order = []
+        state = {i: Solution.STATE_UNVISITED for i in range(numCourses)}
+    
+        def dfs(node):
+            state[node] = Solution.STATE_VISITED 
+            adjacencies = adj_list[node]
 
-        order = []
-        while unlock:
-            course_unlock = None 
-            for u in unlock:
-                if u not in dependencies:
-                    course_unlock = u 
-                    order.append(u)
-                    courses = unlock[u]
-                    for c in courses:
-                        if len(dependencies[c]) == 1:
-                            dependencies.pop(c)
-                        else:
-                            dependencies[c].remove(u)
-                    break
+            for adj in adjacencies:
+                if state[adj] == Solution.STATE_VISITED:
+                    return False
+                elif state[adj] == Solution.STATE_UNVISITED:
+                    if not dfs(adj):
+                        return False
 
-            if course_unlock == None:
-                return []
-            else:
-                unlock.pop(course_unlock)
+            state[node] = Solution.STATE_ADDED 
+            topological_order.append(node)
+            return True
         
-        for c in range(numCourses):
-            if c not in order:
-                order.append(c)
+        for n in range(numCourses):
+            if state[n] == Solution.STATE_UNVISITED:
+                if not dfs(n):
+                    return []
+        
+        topological_order.reverse()
+        return topological_order
 
-        return order
+
 
 s = Solution()
 numCourses = 1
 prerequisites = []
+numCourses = 2
+prerequisites = [[0,1],[1,0]]
 numCourses = 4
 prerequisites = [[1,0],[2,0],[3,1],[3,2]]
 print(s.findOrder(numCourses, prerequisites))
