@@ -93,7 +93,7 @@ class Solution:
             left = i + 1
             right = len(nums) - 1
             while left < right:
-                mid = (left + right + 1) // 2
+                mid = (left + right) // 2 + 1
                 mid_sum = presums[mid] - presums[i]
                 if 2 * mid_sum <= (total - presums[i]):
                     left = mid
