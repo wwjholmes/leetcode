@@ -49,51 +49,33 @@
 # @lc code=start
 class Solution:
     def computeArea(self, A: int, B: int, C: int, D: int, E: int, F: int, G: int, H: int) -> int:
-        # (A, B), (C, D) + (A, D), (C, B) => Range [A, C], [B, D]
-        # (E, F), (G, H) + (E, H), (G, F) => Range [E, G], [F, H]
+        # (A, B), (C, D)
+        # (E, F), (G, H)
+        min_x = min(A, E)
+        min_y = min(B, F)
+        max_x = max(C, G)
+        max_y = max(D, H)
 
-        # case 1: contained
-        if E <= A and A <= G and E <= C and C <= G and F <= B and B <= H and F <= D and D <= H:
-            return (G - E) * (H - F)
-        elif A <= E and E <= C and A <= G and G <= C and B <= F and F <= D and B <= H and H <= D:
-            return (C - A) * (D - B)
+        height = max_y - min_y
+        width = max_x - min_x
 
-        # case 2 
-        overlapped = False
-        if E <= A and A <= G and F <= B and B <= H:
-            overlapped = True
-        elif E <= C and C <= G and F <= D and D <= H:
-            overlapped = True
-        elif E <= A and A <= G and F <= D and D <= H:
-            overlapped = True
-        elif E <= C and C <= G and F <= B and B <= H:
-            overlapped = True
+        height_one = D - B
+        width_one = C - A
 
-        if overlapped:
-            combo_bottom_left_x = min(A, E)
-            combo_bottom_left_y = min(B, F)
-            combo_top_right_x = max(C, G)
-            combo_top_right_y = max(D, H)
-
-            height = combo_top_right_y - combo_bottom_left_y
-            width = combo_top_right_x - combo_bottom_left_x
-
-            height_1 = D - B
-            width_1 = C - A
-
-            height_2 = H - F
-            width_2 = G - E
-
-            return width * height - (width - width_1) * (height - height_2) - (width - width_2) * (height - height_1)
-
-        return (C - A) * (D - B) + (G - E) * (H - F)
+        height_two = H - F
+        width_two = G - E
+        sum_area = (C - A) * (D - B) + (G - E) * (H - F)
+        if height < height_one + height_two and width < width_one + width_two:
+            return sum_area - (width_one + width_two - width) * (height_one + height_two - height)
+        else:
+            return sum_area
 
 
-s = Solution()
-print(s.computeArea(A=-2, B=-2, C=2, D=2, E=-2, F=-2, G=2, H=2))
-print(s.computeArea(A=-3, B=0, C=3, D=4, E=0, F=-1, G=9, H=2))
-print(s.computeArea(A=-2, B=-2, C=2, D=2, E=-1, F=-1, G=1, H=1))
-print(s.computeArea(A=-3, B=-3, C=3, D=-1, E=-2, F=-2, G=2, H=2))
+# s = Solution()
+# print(s.computeArea(A=-2, B=-2, C=2, D=2, E=-2, F=-2, G=2, H=2))
+# print(s.computeArea(A=-3, B=0, C=3, D=4, E=0, F=-1, G=9, H=2))
+# print(s.computeArea(A=-2, B=-2, C=2, D=2, E=-1, F=-1, G=1, H=1))
+# print(s.computeArea(A=-3, B=-3, C=3, D=-1, E=-2, F=-2, G=2, H=2))
 
 
 # @lc code=end
