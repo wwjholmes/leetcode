@@ -62,20 +62,34 @@ class TreeNode:
 
 
 class Solution:
+    # def hasPathSum(self, root: TreeNode, targetSum: int) -> bool:
+    #     if root == None:
+    #         return False
+
+    #     if root.left == None and root.right == None:
+    #         return True if targetSum == root.val else False
+
+    #     targetSum -= root.val
+
+    #     if root.left and self.hasPathSum(root.left, targetSum):
+    #         return True
+    #     elif root.right and self.hasPathSum(root.right, targetSum):
+    #         return True
+
+    #     return False
+
     def hasPathSum(self, root: TreeNode, targetSum: int) -> bool:
         if root == None:
             return False
-
-        if root.left == None and root.right == None:
-            return True if targetSum == root.val else False
-
-        targetSum -= root.val
-
-        if root.left and self.hasPathSum(root.left, targetSum):
-            return True
-        elif root.right and self.hasPathSum(root.right, targetSum):
-            return True
-
+        stack = [(root, targetSum)]
+        while stack:
+            [node, target] = stack.pop()
+            if node.left == None and node.right == None and target == node.val:
+                return True
+            if node.left:
+                stack.append((node.left, target - node.val))
+            if node.right:
+                stack.append((node.right, target - node.val))
         return False
 
 
