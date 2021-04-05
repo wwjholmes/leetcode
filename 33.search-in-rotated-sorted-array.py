@@ -52,42 +52,38 @@
 #
 from typing import List
 # @lc code=start
+
+
 class Solution:
     def search(self, nums: List[int], target: int) -> int:
-        # find pivot index
-        def findPivot(left: int, right: int) -> int:
-            if nums[left] <= nums[right]:
-                return left
-            mid = (left + right) // 2
-            if nums[left] <= nums[mid]:
-                return findPivot(mid + 1, right)
-            elif nums[mid] <= nums[right]:
-                return findPivot(left, mid)
-
-        length = len(nums)
-        left = findPivot(0, length -1)
-        right = left + length -1
+        left = 0
+        right = len(nums) - 1
         while left < right:
             mid = (left + right) // 2
-            if nums[mid % length] >= target:
-                right = mid
+            if nums[mid] == target:
+                return mid
+
+            if nums[mid] >= nums[left]:
+                if nums[left] <= target < nums[mid]:
+                    right = mid - 1
+                else:
+                    left = mid + 1
             else:
-                left = mid + 1
+                if nums[mid] < target <= nums[right]:
+                    left = mid + 1
+                else:
+                    right = mid - 1
 
-        return left % length if nums[left % length] == target else -1
+        return left if nums[left] == target else -1
 
 
-
-
-
-            
-
-        
 # @lc code=end
 
 # s = Solution()
-# nums = [4,5,6,7,0,1,2]
-# target = 3 
 # nums = [1]
 # target = 0
+# nums = [4, 5, 6, 7, 0, 1, 2]
+# target = 0
+# nums = [3, 1]
+# target = 1
 # print(s.search(nums, target))
