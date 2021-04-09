@@ -12,7 +12,7 @@
 # Total Accepted:    320.3K
 # Total Submissions: 654.2K
 # Testcase Example:  '["RandomizedSet","insert","remove","insert","getRandom","remove","insert","getRandom"]\n' +
-  '[[],[1],[2],[2],[],[1],[2],[]]'
+#  '[[],[1],[2],[2],[],[1],[2],[]]'
 #
 # Implement the RandomizedSet class:
 # 
