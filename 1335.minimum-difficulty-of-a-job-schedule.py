@@ -94,37 +94,36 @@ class Solution:
 
         f = [[float('inf') for j in range(n)] for i in range(m)]
 
-        for i in range(m):
-            max_diff = float('-inf')
+        # base case for job schdule with 1 day
+        max_diff = float('-inf')
+        for j in range(n):
+            max_diff = max(max_diff, jobDifficulty[j])
+            f[0][j] = max_diff
+
+        for i in range(1, m):
             for j in range(n):
-                # base case for job schdule with 1 day
-                if i == 0:
-                    max_diff = max(max_diff, jobDifficulty[j])
-                    f[i][j] = max_diff
-                else:
-                    # other cases when d > 1
-                    min_diff = float('inf')
-                    max_diff = float('-inf')
-                    for k in range(0, j):
-                        max_diff = max(max_diff, jobDifficulty[j-k])
-                        diff = f[i-1][j-k-1] + max(max_diff, jobDifficulty[j-k])
-                        min_diff = min(min_diff, diff)
-                    f[i][j] = float('inf') if i > j else min_diff
+                min_diff = float('inf')
+                max_diff = float('-inf')
+                for k in range(j):
+                    max_diff = max(max_diff, jobDifficulty[j-k])
+                    diff = f[i-1][j-k-1] + max(max_diff, jobDifficulty[j-k])
+                    min_diff = min(min_diff, diff)
+                f[i][j] = float('inf') if i > j else min_diff
+
         # print(f)
         return f[m-1][n-1] if f[m-1][n-1] != float('inf') else -1
 
-                
 
 # @lc code=end
 # s = Solution()
-# jobDifficulty = [1,1,1]
+# jobDifficulty = [1, 1, 1]
 # d = 3
-# jobDifficulty = [6,5,4,3,2,1]
+# jobDifficulty = [6, 5, 4, 3, 2, 1]
 # d = 2
-# jobDifficulty = [7,1,7,1,7,1]
+# jobDifficulty = [7, 1, 7, 1, 7, 1]
 # d = 3
-# jobDifficulty = [9,9,9]
+# jobDifficulty = [9, 9, 9]
 # d = 4
-# jobDifficulty = [11,111,22,222,33,333,44,444]
+# jobDifficulty = [11, 111, 22, 222, 33, 333, 44, 444]
 # d = 6
 # print(s.minDifficulty(jobDifficulty, d))
