@@ -56,22 +56,18 @@ from typing import List
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
         max_sum = float('-inf')
-        sub_sum = 0 
+        sub_sum = float('-inf')
         for n in nums:
-            if sub_sum > 0:
-                max_sum = max(max_sum, sub_sum + n)
-                sub_sum = max(sub_sum + n, 0)
-            else:
-                sub_sum = n
-                max_sum = max(max_sum, n)
+            sub_sum = max(sub_sum + n, n)
+            max_sum = max(max_sum, sub_sum)
         return max_sum
 
 
         
 # @lc code=end
 
-s = Solution()
-nums = [5,4,-1,7,8]
-nums = [1]
-nums = [-2,1,-3,4,-1,2,1,-5,4]
-print(s.maxSubArray(nums))
+# s = Solution()
+# nums = [5,4,-1,7,8]
+# nums = [1]
+# nums = [-2,1,-3,4,-1,2,1,-5,4]
+# print(s.maxSubArray(nums))
