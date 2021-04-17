@@ -56,7 +56,7 @@ from typing import List
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
         max_sum = float('-inf')
-        sub_sum = -1 
+        sub_sum = 0 
         for n in nums:
             if sub_sum > 0:
                 max_sum = max(max_sum, sub_sum + n)
