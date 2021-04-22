@@ -55,36 +55,30 @@
 from typing import List
 from collections import defaultdict
 # @lc code=start
+
+
 class Solution:
     def longestStrChain(self, words: List[str]) -> int:
-        def longestChain(w: str, words_set: set, dp: dict) -> int:
-            if w in dp:
-                return dp[w]
-
-            for i in range(len(w)):
-                predecessor = w[:i] + w[i+1:]
-                if predecessor in words_set:
-                    # print(w, predecessor)
-                    dp[w] = max(dp[w], longestChain(
-                        predecessor, words_set, dp) + 1)
-            # print(w, dp[w])
-            return dp[w]
-
         # sort the given list by length
         words = sorted(words, key=lambda x: len(x))
         words.reverse()
         words_set = set(words)
         dp = defaultdict(lambda: 1)
 
-        max_chain = 0
+        max_chain = 1
         for w in words:
-            max_chain = max(max_chain, longestChain(w, words_set, dp))
+            for i in range(len(w)):
+                curr_w = w[:i] + w[i+1:]
+                if curr_w in words_set:
+                    # print(w, predecessor)
+                    dp[curr_w] = max(dp[curr_w], dp[w] + 1)
+                    max_chain = max(max_chain, dp[curr_w])
         return max_chain
 
 # @lc code=end
 
 
 words = ["xbc", "pcxbcf", "xb", "cxbc", "pcxbc"]
-words = ["a","b","ba","bca","bda","bdca"]
+words = ["a", "b", "ba", "bca", "bda", "bdca"]
 s = Solution()
 print(s.longestStrChain(words))
