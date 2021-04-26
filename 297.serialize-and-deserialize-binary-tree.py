@@ -83,26 +83,17 @@ class Codec:
         :rtype: str
         """
         serialized = []
-        stack = [root] if root else []
-        pending = []
-        valid_node = False
+        stack = [(root, -1, -1)] if root else []
+        index = 0
         while stack:
-            n = stack.pop(0)
-            if n == None:
-                serialized.append("null")
-                pending.append(None)
-                pending.append(None)
-            else:
-                serialized.append(str(n.val))
-                pending.append(n.left)
-                pending.append(n.right)
-                if n.left or n.right:
-                    valid_node = True
-
-            if not stack and valid_node:
-                stack = pending
-                pending = []
-                valid_node = False
+            (n, parent_index, left_or_right) = stack.pop(0)
+            serialized.append(
+                ":".join([str(n.val), str(parent_index), str(left_or_right)]))
+            if n.left:
+                stack.append((n.left, index, 0))
+            if n.right:
+                stack.append((n.right, index, 1))
+            index += 1
 
         return ','.join(serialized)
 
@@ -117,21 +108,16 @@ class Codec:
         # print('deserialize', data, len(data))
         if not data:
             return []
-        vals = data.split(',')
-        nodes = [None for _ in range(len(vals))]
-        for i in range(len(vals)):
-            val = vals[i]
-            if val == 'null':
-                # empty node
-                continue
+        t = data.split(',')
+        nodes = [None for _ in range(len(t))]
+        for i in range(len(t)):
+            [val, parent_index, left_or_right] = t[i].split(":")
             node = TreeNode(int(val))
             nodes[i] = node
-            parent_idx = (i - 1) // 2
-            if parent_idx < 0:
-                # root node has no parent
+            if i == 0:
                 continue
-            parent = nodes[parent_idx]
-            if i == 2 * parent_idx + 1:
+            parent = nodes[int(parent_index)]
+            if left_or_right == "0":
                 parent.left = node
             else:
                 parent.right = node
@@ -165,5 +151,5 @@ class Codec:
 # print('serialized:', ser.serialize(root))
 # deser = Codec()
 # ds = deser.deserialize(ser.serialize(root))
-# print(ser.serialize(ds))
+# print('deserialized:', ser.serialize(ds))
  #ans = deser.deserialize(ser.serialize(root))
