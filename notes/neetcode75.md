@@ -19,4 +19,11 @@ lessons rather than a full solution write-up.
 
 ## Entries
 
-_No new NeetCode 75 sessions recorded yet._
+### `p0242` — Valid Anagram
+
+- **Pattern:** Character-frequency comparison; first attempt used sorting.
+- **First-attempt result / time:** Correct sorting solution; time not recorded.
+- **Time / space complexity:** `O(n log n + m log m)` time and `O(n + m)` space.
+- **What I got wrong or hesitated on:** Distinguishing quick inline assertions from formal `unittest` coverage; initially added unnecessary `None` checks outside the problem contract.
+- **Tests or edge cases I initially missed:** Same-length strings with the same distinct letters but different frequencies (for example, `"aacc"` and `"ccac"`).
+- **Retry cue:** Verify character counts, not merely whether both strings contain the same kinds of letters.
