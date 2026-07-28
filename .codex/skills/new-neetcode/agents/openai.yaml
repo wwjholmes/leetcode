@@ -1,0 +1,7 @@
+interface:
+  display_name: "New NeetCode Problem"
+  short_description: "Scaffold a blank NeetCode practice problem"
+  default_prompt: "Use $new-neetcode to scaffold a blank exercise from this NeetCode URL:"
+
+policy:
+  allow_implicit_invocation: false
