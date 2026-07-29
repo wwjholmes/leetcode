@@ -30,18 +30,28 @@ clear Python, and reliable validation—not raw problem count.
 - Put new or revisited problems in `problems/` as importable modules named
   `p####_problem_name.py`. Keep the LeetCode-compatible `Solution` class and
   method signature, with useful type annotations.
-- Put matching tests in `tests/test_p####_problem_name.py` and import the
-  solution module normally.
+- Inline tests in the problem module (an `if __name__ == "__main__":` block
+  with asserts) are the default. This mirrors live interview conditions,
+  where separate test files are impractical under time constraints.
+- A separate `tests/test_p####_problem_name.py` module (standard-library
+  `unittest`, importing the solution normally) is optional but encouraged
+  when production-style rigor or a lasting regression gate is wanted.
 - Each problem needs a representative case, relevant boundary cases, and any
-  applicable contract/invariant checks. Add a regression test for every
-  discovered mistake.
+  applicable contract/invariant checks, whether inline or in `tests/`. Add a
+  regression test for every discovered mistake.
 - Prefer small, direct, idiomatic Python solutions. Avoid cleverness,
   unnecessary abstractions, and hidden mutation when the prompt does not allow
   it.
 
 ## Verification
 
-Run the full test suite with:
+Run a problem's inline tests with:
+
+```bash
+python problems/p####_problem_name.py
+```
+
+Run the full `tests/` suite (when present) with:
 
 ```bash
 python -m unittest discover -s tests -v
