@@ -38,8 +38,7 @@ if __name__ == "__main__":
     result = s.topKFrequent(nums, k) 
     assert sorted(result) == expect, f"expect {expect}, but {result}"
 
-
-    # k == len(nums) 
+    # k == len(nums)
     nums = [1,2,2,3,3,3] 
     k = 3  
 
@@ -47,7 +46,7 @@ if __name__ == "__main__":
     result = s.topKFrequent(nums, k) 
     assert sorted(result) == expect, f"expect {expect}, but {result}"
 
-    # k == 1 
+    # k == 1
     nums = [1,2,2,3,3,3] 
     k = 1  
 
@@ -55,7 +54,7 @@ if __name__ == "__main__":
     result = s.topKFrequent(nums, k) 
     assert sorted(result) == expect, f"expect {expect}, but {result}"
 
-    # k == 2, with negative number 
+    # k == 2, with negative number
     nums = [1,2,2,-3,-3,-3] 
     k = 2  
 
