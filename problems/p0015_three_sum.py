@@ -25,7 +25,8 @@ class Solution:
                     results.add((sorted_nums[i], sorted_nums[j], sorted_nums[k]))
                     j += 1
                     k -= 1
-        return [list(triplet) for triplet in results]
+        # return list(map(list, results))
+        return [list(t) for t in results]
 
 
 if __name__ == "__main__":
