@@ -27,3 +27,12 @@ lessons rather than a full solution write-up.
 - **What I got wrong or hesitated on:** Distinguishing quick inline assertions from formal `unittest` coverage; initially added unnecessary `None` checks outside the problem contract.
 - **Tests or edge cases I initially missed:** Same-length strings with the same distinct letters but different frequencies (for example, `"aacc"` and `"ccac"`).
 - **Retry cue:** Verify character counts, not merely whether both strings contain the same kinds of letters.
+
+### `p0125` — Valid Palindrome
+
+- **Pattern:** Two pointers converging from both ends, skipping non-alphanumerics.
+- **First-attempt result / time:** Correct two-pointer solution; time not recorded.
+- **Time / space complexity:** `O(n)` time, `O(1)` space after review (first attempt was `O(n)` space due to `lower()` copy).
+- **What I got wrong or hesitated on:** Asymmetric skip-loop bounds (`i < j` on the left, `j > 0` on the right) rescued by an `if i > j: return True` branch — correct but convoluted; also carried an unnecessary `strip()` and a `lower()` full-string copy.
+- **Tests or edge cases I initially missed:** Digits mixed with case-insensitivity (for example, `"0P"` is not a palindrome).
+- **Retry cue:** Bound both skip loops with `i < j`; lowercase per character instead of copying the string.
